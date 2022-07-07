@@ -1,5 +1,5 @@
 import { useRequest } from 'ahooks';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { getUserInfo } from 'src/ajax';
 import type { userInfo } from 'types/user'
 import TextLoading from 'src/commonComponents/TextLoading';
@@ -16,7 +16,6 @@ export default (props: Props) => {
     const { data, error, loading } = useRequest(getUserInfo, {
         onSuccess: resolveHandle
     })
-
     return (
         <div>
             {loading ? <TextLoading /> : null}
