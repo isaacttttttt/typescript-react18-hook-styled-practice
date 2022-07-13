@@ -18,8 +18,11 @@ export default (props: Props) => {
     })
     return (
         <div>
-            {loading ? <TextLoading /> : null}
-            <div>{state ? state.user : 'No Name'}</div>
+            {
+                loading ?
+                    <TextLoading /> :
+                    <div>{state ? state.user : 'No Name'}</div>
+            }
         </div>
     )
 }
