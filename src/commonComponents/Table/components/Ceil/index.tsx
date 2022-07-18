@@ -6,13 +6,13 @@ interface spcificHandle {
 }
 export default ({ rowIndex, coulmnIndex, value, customDesign }: dataFormat & spcificHandle) => {
     return (
-        <div className="ceil-warp" data-row={rowIndex} data-coulmn={coulmnIndex}>
+        <div className="ceil-wrap" data-row={ rowIndex } data-coulmn={ coulmnIndex }>
 
             {
                 customDesign ?
                     customDesign(rowIndex, coulmnIndex, value)
                     :
-                    <span className="ceil-inner-text">{value}</span>
+                    <span className="ceil-inner">{ value }</span>
             }
         </div>
     )

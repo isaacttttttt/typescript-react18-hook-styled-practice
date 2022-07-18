@@ -1,5 +1,5 @@
-import { dataFormat, coulmnDataFormat } from './types.d';
-import { ReactElement } from "react";
+import {dataFormat, coulmnDataFormat} from './types.d';
+import {ReactElement} from "react";
 
 /**
  * @author herotang 2022/7/7
@@ -11,11 +11,13 @@ export type commonType = string | number;
 export interface dataFormat {
     rowIndex: commonType;
     coulmnIndex: commonType;
-    value: commonType
+    value: commonType;
 }
 //表单接受数据
 export type coulmnDataFormat = Array<dataFormat>;
-
+export interface dataList {
+    [commonType]: commonType
+}
 //行索引数据格式
 interface rowFormat {
     rowIndex: commonType;
@@ -24,9 +26,10 @@ interface rowFormat {
 //列索引数据格式
 export interface coulmnFormat {
     sortable: boolean;
+    sortFunc?: (pre: any, next: any) => number;
     coulmnIndex: commonType;
     title: commonType;
-    customDesign?: (rowIndex: commonType, coulmnIndex: commonType, value: commonType) => any;
+    customDesign?: (rowIndex: commonType, coulmnIndex: commonType, value: commonType) => ReactElement;
 };
 
 //配置项格式
@@ -40,6 +43,6 @@ type configFormat = {
 export default interface Props {
     coulmn: Array<coulmnFormat>;
     row: Array<rowFormat>;
-    data: Array<coulmnDataFormat>;
+    dataList: Array<dataList>
     config?: configFormat;
 }

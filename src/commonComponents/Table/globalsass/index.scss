@@ -1,0 +1,26 @@
+$normalBackground: #ffffff;
+$grayBackground: #fafafa;
+$emphasizedBackground: #8ac5f5;
+$normalBorder: #f0f0f0;
+$grayBorder: #d4d4d4;
+
+@mixin flexDisplay($direction, $wrap, $justify, $aligin) {
+    display: flex;
+    justify-content: $justify;
+    align-items: $aligin ;
+    @content;
+
+    flex: {
+        flow: $direction $wrap
+    }
+}
+
+@mixin absolutePosition() {
+    @content;
+    position: absolute;
+}
+
+@mixin relativePosition() {
+    @content;
+    position: relative;
+}

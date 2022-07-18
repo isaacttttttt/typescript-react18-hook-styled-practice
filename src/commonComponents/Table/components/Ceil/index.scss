@@ -1,8 +1,16 @@
-.ceil {
+@use '../../globalsass/index.scss' as style;
+
+.ceil-wrap {
     width: auto;
-    height: 58px;
-    padding: 8px;
+    height: 48px;
+    min-width: 58px;
     box-sizing: border-box;
-    border: 1px solid #50ff67;
+    border-bottom: 1px solid style.$normalBorder;
     font-size: 18px;
+    user-select: none;
+    padding: 8px;
+    transition: all ease-in-out 1.5s;
+    @include style.relativePosition();
+    @include style.flexDisplay(row, nowrap, flex-start, center);
+
 }
