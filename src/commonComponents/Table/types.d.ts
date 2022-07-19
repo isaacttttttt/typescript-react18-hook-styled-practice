@@ -33,7 +33,7 @@ export interface columnFormat {
 type configFormat = {
     pagination?: boolean;
     paginationNum?: number;
-    ceilHover?: boolean;
+    cellHover?: boolean;
     rowHover?: boolean;
     eventHandle?: (columnIndex: commonType, rowIndex: commonType, value: commonType, type: string) => void;
     rowIntersected?: boolean;
