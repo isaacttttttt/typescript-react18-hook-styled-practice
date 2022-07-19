@@ -3,7 +3,7 @@ import type {dataFormat, commonType} from "../../types"
 import "./index.scss";
 interface spcificHandle {
     customDesign?: (rowIndex: commonType, columnIndex: commonType, value: commonType) => ReactElement;
-    titleClickHandle?: (() => void) | null;
+    titleClickHandle?: ((e: React.MouseEvent) => void) | null;
 }
 const Cell = ({rowIndex, columnIndex, value, customDesign, titleClickHandle}: dataFormat & spcificHandle) => {
     return (
@@ -11,8 +11,8 @@ const Cell = ({rowIndex, columnIndex, value, customDesign, titleClickHandle}: da
             className="cell-wrap"
             data-row={rowIndex}
             data-column={columnIndex}
-            onClick={() => {
-                if (titleClickHandle) titleClickHandle()
+            onClick={(e) => {
+                if (titleClickHandle) titleClickHandle(e)
             }}>
 
             {

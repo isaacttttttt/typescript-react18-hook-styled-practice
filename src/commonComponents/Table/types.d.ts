@@ -33,9 +33,9 @@ export interface columnFormat {
 type configFormat = {
     pagination?: boolean;
     paginationNum?: number;
-    ceilHover?: boolean;
+    cellHover?: boolean;
     rowHover?: boolean;
-    eventHandle?: (columnIndex: commonType, rowIndex: commonType, value: commonType, type: string) => void;
+    eventHandle?: (columnIndex: number, rowIndex: number, value: string, selected: dataList) => any;
     rowIntersected?: boolean;
     columnIntersected?: boolean;
 }

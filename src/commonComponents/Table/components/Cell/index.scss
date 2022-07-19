@@ -8,7 +8,7 @@
     user-select: none;
     padding: 6px;
     overflow: hidden;
-    transition: all ease-in-out 0.5s;
+    transition: all ease-in-out 2s;
     @include style.relativePosition();
     @include style.flexDisplay(row, nowrap, flex-start, center);
 

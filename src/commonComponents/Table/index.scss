@@ -1,6 +1,6 @@
 @use './globalsass/index.scss' as style;
 
-.table-warp {
+.table-wrap {
     height: 100%;
     width: auto;
     overflow: auto;
@@ -8,11 +8,11 @@
     font-weight: 200;
     background-color: style.$normalBackground;
     scroll-snap-type: both mandatory;
-    @include style.flexDisplay(row, nowrap, stretch, stretch);
+    @include style.flexDisplay(column, nowrap, space-between, stretch);
     @include style.scrollBarStyle();
     @include style.relativePosition();
 
-    .table-content-warp {
+    .table-content-wrap {
         flex-grow: 1;
         @include style.flexDisplay(row, nowrap, stretch, stretch);
 
@@ -33,6 +33,7 @@
                 background-color: style.$grayBorder;
                 border-radius: 2px;
                 cursor: col-resize;
+                opacity: 0.8;
             }
 
         }
@@ -43,11 +44,66 @@
             .table-column {
                 min-width: 58px;
 
+                .cell-mask {
+                    &:hover {
+                        box-shadow: inset 0 -3px 3px -2px #8d8d8d;
+                        z-index: 9999999999;
+                    }
+                }
+
                 .intersected {
-                    background-color: #f0f0f0;
+                    background-color: style.$grayBackground;
                 }
             }
 
+        }
+    }
+
+    .table-footer-wrap {
+        .table-root-content {
+            @include style.flexDisplay(row, nowrap, flex-end, center);
+            padding: 8px;
+
+            .button-outter {
+                border: 2px solid #d4d4d4;
+                border-radius: 4px;
+                padding-bottom: 2px;
+
+                &:hover {
+                    border: 2px solid #2d89f1;
+                }
+
+
+                cursor: pointer;
+            }
+
+            .disable {
+                cursor: not-allowed;
+
+                &:hover {
+                    border: 2px solid #d4d4d4;
+                }
+            }
+
+            .page-to-wrap {
+                margin-left: 8px;
+                margin-right: 8px;
+
+                .page-to-input {
+                    width: 28px;
+                    height: 28px;
+                    outline: none;
+                    border-radius: 4px;
+                    border: 2px solid #d4d4d4;
+                    color: #2d89f1;
+                    margin-right: 4px;
+
+                    &:focus-visible {
+                        outline: none;
+                        border: 2px solid #2d89f1;
+                    }
+                }
+            }
         }
     }
 }
