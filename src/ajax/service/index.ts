@@ -6,6 +6,5 @@ export const getUserInfo = makeRequest<userInfo>({
     config: {
         mode: 'cors',
         method: 'GET',
-
     }
 })

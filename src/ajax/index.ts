@@ -1,1 +1,1 @@
-export { getUserInfo } from './service'
+export {getUserInfo} from './service'

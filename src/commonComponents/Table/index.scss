@@ -1,31 +1,15 @@
 @use './globalsass/index.scss' as style;
 
-@mixin scrollBarStyle {
-    &::-webkit-scrollbar {
-        height: auto;
-    }
-
-    &::-webkit-scrollbar-thumb:hover {
-        background-color: #807f7f;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        background-color: #a1a0a0;
-    }
-}
-
 .table-warp {
     height: 100%;
     width: auto;
-
     overflow: auto;
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, apple color emoji, segoe ui emoji, Segoe UI Symbol, noto color emoji;
     font-weight: 200;
     background-color: style.$normalBackground;
     scroll-snap-type: both mandatory;
     @include style.flexDisplay(row, nowrap, stretch, stretch);
-    @include scrollBarStyle();
+    @include style.scrollBarStyle();
     @include style.relativePosition();
 
     .table-content-warp {
@@ -33,56 +17,37 @@
         @include style.flexDisplay(row, nowrap, stretch, stretch);
 
         .title {
-            background-color: style.$grayBackground;
             @include style.relativePosition();
+            background-color: style.$grayBackground;
+            border-bottom: 1px solid style.$grayBorder;
+            font-weight: 400;
 
-            .ceil-inner,
-            .ceil-sort-wrap {
-                font-weight: 500;
+            &::after {
+                position: absolute;
+                top: 50%;
+                right: 0px;
+                content: "";
+                transform: translateY(-50%);
+                height: 50%;
+                width: 4px;
+                background-color: style.$grayBorder;
+                border-radius: 2px;
+                cursor: col-resize;
+            }
 
-                &::before {
-                    position: absolute;
-                    top: 50%;
-                    left: 0px;
-                    content: "";
-                    transform: translateY(-50%);
-                    height: 40%;
-                    width: 4px;
-                    background-color: style.$grayBorder;
-                    border-radius: 4px;
+        }
+
+        .table-columns {
+            @include style.flexDisplay(row, nowrap, stretch, stretch);
+
+            .table-column {
+                min-width: 58px;
+
+                .intersected {
+                    background-color: #f0f0f0;
                 }
             }
 
-            .ceil-sort-wrap {
-                background: url("./assets/icon/sort.png");
-            }
-
-
-        }
-
-        .table-rowcoulmn {
-            z-index: 999;
-        }
-
-        .fixed {
-            position: absolute;
-
-            .title {
-                position: relative;
-            }
-
-            .ceil-wrap {
-
-                width: 80px;
-                background-color: style.$emphasizedBackground;
-                color: #ffffff;
-                font-weight: 500;
-                z-index: 9999;
-            }
-        }
-
-        .table-coulmns {
-            @include style.flexDisplay(row, nowrap, stretch, stretch);
         }
     }
 }

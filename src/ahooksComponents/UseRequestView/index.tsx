@@ -1,19 +1,19 @@
-import { useRequest } from 'ahooks';
-import { useState } from 'react';
-import { getUserInfo } from 'src/ajax';
-import type { userInfo } from 'types/user'
+import {useRequest} from 'ahooks';
+import {useState} from 'react';
+import {getUserInfo} from 'src/ajax';
+import type {userInfo} from 'types/user'
 import TextLoading from 'src/commonComponents/TextLoading';
 import './index.less'
 interface Props {
 
 }
 
-export default (props: Props) => {
+const RequestView = (props: Props) => {
     const [state, setState] = useState<userInfo | null>()
     const resolveHandle = (data: userInfo) => {
         setState(data)
     }
-    const { data, error, loading } = useRequest(getUserInfo, {
+    const {data, error, loading} = useRequest(getUserInfo, {
         onSuccess: resolveHandle
     })
     return (
@@ -26,3 +26,4 @@ export default (props: Props) => {
         </div>
     )
 }
+export default RequestView;

@@ -1,4 +1,4 @@
-import {dataFormat, coulmnDataFormat} from './types.d';
+import {dataFormat, columnDataFormat} from './types.d';
 import {ReactElement} from "react";
 
 /**
@@ -10,39 +10,37 @@ export type commonType = string | number;
 //表格接受数据格式
 export interface dataFormat {
     rowIndex: commonType;
-    coulmnIndex: commonType;
+    columnIndex: commonType;
     value: commonType;
 }
 //表单接受数据
-export type coulmnDataFormat = Array<dataFormat>;
+export type columnDataFormat = Array<dataFormat>;
 export interface dataList {
     [commonType]: commonType
 }
 //行索引数据格式
-interface rowFormat {
-    rowIndex: commonType;
-    title: commonType
-}
+
 //列索引数据格式
-export interface coulmnFormat {
+export interface columnFormat {
     sortable: boolean;
     sortFunc?: (pre: any, next: any) => number;
-    coulmnIndex: commonType;
+    columnIndex: commonType;
     title: commonType;
-    customDesign?: (rowIndex: commonType, coulmnIndex: commonType, value: commonType) => ReactElement;
+    customDesign?: (rowIndex: commonType, columnIndex: commonType, value: commonType) => ReactElement;
 };
 
 //配置项格式
 type configFormat = {
-    pagination: boolean;
-    paginationNum: number;
-    ceilHover: boolean;
-    rowHover: boolean;
-    eventHandle: (coulmnIndex: commonType, rowIndex: commonType, value: commonType, type: string) => void
+    pagination?: boolean;
+    paginationNum?: number;
+    ceilHover?: boolean;
+    rowHover?: boolean;
+    eventHandle?: (columnIndex: commonType, rowIndex: commonType, value: commonType, type: string) => void;
+    rowIntersected?: boolean;
+    columnIntersected?: boolean;
 }
 export default interface Props {
-    coulmn: Array<coulmnFormat>;
-    row: Array<rowFormat>;
+    column: Array<columnFormat>;
     dataList: Array<dataList>
     config?: configFormat;
 }

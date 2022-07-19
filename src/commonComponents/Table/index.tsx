@@ -1,36 +1,52 @@
-import {ReactElement, useEffect, useRef, useState, useMemo} from 'react';
+import React, {ReactElement, useEffect, useRef, useState, useMemo, ReactEventHandler} from 'react';
 import type Props from './types';
-import {dataFormat, commonType, coulmnFormat, dataList} from './types';
-import Ceil from './components/Ceil';
+import {dataFormat, commonType, columnFormat, dataList} from './types';
+import Cell from './components/Cell';
 import "./index.scss"
 
-export default ({row, coulmn, config, dataList}: Props) => {
-    const [rowCoulmnFixed, setFixed] = useState<boolean>(false)
-    const [proxyData, sortProxyData] = useState<Array<dataList>>(dataList)
+const Table = ({column, config, dataList}: Props) => {
+    //数据初始化，排序标识
+    const [proxyData, sortProxyData] = useState<Array<dataList>>(() => dataList.slice())
     const [sortFlag, setsortFlag] = useState<boolean>(false)
-    const rowCoulmnRef = useRef<HTMLDivElement>(null)
+    //拖拽设置大小事件
+    const setColumnWidth = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        e.preventDefault()
+        e.stopPropagation()
+        const column = (e?.currentTarget as HTMLDivElement).parentNode
+        const startX = e.clientX
+        const initWidth = (column as HTMLDivElement).clientWidth
+        const moveHandle = (moveEvent: MouseEvent) => {
+            (column as HTMLDivElement).style.width = initWidth + moveEvent.clientX - startX + 'px'
+        }
+        document.onmousemove = moveHandle
+        document.onmouseup = () => {
+            document.onmousemove = null;
+            document.onmouseup = null;
+        }
+    }
     //数据格式打包成列，排序应该也在这里处理。
     const currentData = useMemo(
         () =>
             proxyData
                 .reduce((tempDataList: Array<dataFormat[]>, obj, rowIndex) => {
-                    Object.values(obj).forEach((value, coulmnIndex) => {
-                        tempDataList[coulmnIndex].push({rowIndex, coulmnIndex, value})
+                    Object.values(obj).forEach((value, columnIndex) => {
+                        tempDataList[columnIndex].push({rowIndex, columnIndex, value})
                     })
                     return tempDataList
-                }, new Array(coulmn.length).fill(0).map(val => []) as Array<dataFormat[]>)
-        , [proxyData, sortFlag])
-    //处理Ceil的点击事件或者其他事件，后面调整名字
-    const [triggeredCeil, setCeil] = useState<dataFormat>();
+                }, new Array(column.length).fill(0).map(val => []) as Array<dataFormat[]>)
+        , [sortFlag])
+    //处理Cell的点击事件或者其他事件，后面调整名字
+    const [triggeredCell, setCell] = useState<dataFormat>();
     //分页这里要用
+    //点击下一页renderIndex应该做出对应变化
     const [renderIndex, setRenderIndex] = useState<number>(0)
-    const renderNum: number = config?.paginationNum ?? 20;
+    const renderNum: number = config?.pagination ? (config?.paginationNum ?? 30) : Infinity;
     //渲染单独列
-    const renderCoulmn = ({sortable, coulmnIndex, customDesign, title, sortFunc}: coulmnFormat, coulmnData: Array<dataFormat>): ReactElement => {
+    const renderColumn = ({sortable, columnIndex, customDesign, title, sortFunc}: columnFormat, columnData: Array<dataFormat>): ReactElement => {
         //当前要渲染的数据
-        const currentCoulmnData = (coulmnData.slice(renderIndex, renderIndex + renderNum + 1));
+        const currentColumnData = (columnData.slice(renderIndex, renderIndex + renderNum + 1));
         //列的排序函数函数
-        const sortCoulmnData = () => {
+        const sortColumnData = () => {
             if (sortFlag)
                 sortProxyData(preData => preData.sort((pre, next) => sortable && sortFunc ? sortFunc(pre, next) : 0))
             else
@@ -38,62 +54,69 @@ export default ({row, coulmn, config, dataList}: Props) => {
 
             setsortFlag(flag => !flag)
         }
-        const sortableIcon = (row: commonType, coulmn: commonType, title: commonType) => {
+        const sortableIcon = (row: commonType, column: commonType, title: commonType) => {
             return sortable ?
                 (
-                    <div className="ceil-sort-wrap" onClick={sortCoulmnData}>
+                    <div className="cell-sort-wrap" >
                         {title}
                     </div>
                 ) : (
-                    <div className="ceil-inner" >
+                    <div className="cell-inner" >
                         {title}
                     </div>
                 )
         }
+        //行交叉渲染背景色
+        let isIntersected = true
+        const isRenderColor = (): string => {
+            if (!config?.rowIntersected)
+                return ''
+            isIntersected = !isIntersected
+            return isIntersected ? ' intersected' : ''
+        }
         return (
-            <div className='table-coulmn' key={title}>
-                <div className='title' >
-                    <Ceil rowIndex={-1} coulmnIndex={coulmnIndex} value={title} customDesign={sortableIcon}></Ceil>
+            <div className='table-column' key={title} >
+                <div className='title' onMouseDown={(e) => setColumnWidth(e)} >
+                    <Cell
+                        rowIndex={-1}
+                        columnIndex={columnIndex}
+                        value={title}
+                        customDesign={sortableIcon}
+                        titleClickHandle={sortable ? () => sortColumnData() : null}
+                    />
                 </div>
                 {
-                    currentCoulmnData.map(({rowIndex, coulmnIndex, value}) => {
-                        return <Ceil rowIndex={rowIndex} value={value} coulmnIndex={coulmnIndex} customDesign={customDesign} key={rowIndex + ':' + coulmnIndex}></Ceil>
-                    })
-                }
-            </div>
-        )
-    }
-    //渲染单独行名列
-    const renderRows = (): ReactElement => {
-        const currentRow = row.slice(renderIndex, renderIndex + renderNum + 1)
-        return (
-            <div className='table-rowcoulmn' ref={rowCoulmnRef}>
-                <div className='title' >
-                    <Ceil rowIndex={-1} coulmnIndex={-1} value={'序号'} ></Ceil>
-                </div>
-                {
-                    currentRow.map(({rowIndex, title}) => {
-                        return <Ceil rowIndex={rowIndex} value={title} coulmnIndex={-1} key={rowIndex + '' + '-1'}></Ceil>
+                    currentColumnData.map(({rowIndex, columnIndex, value}) => {
+                        return (
+                            <div className={'cell-mask' + isRenderColor()} key={rowIndex + ':' + columnIndex}>
+                                <Cell
+                                    rowIndex={rowIndex}
+                                    value={value}
+                                    columnIndex={columnIndex === 0 ? -1 : columnIndex}
+                                    customDesign={customDesign}
+                                    key={rowIndex + ':' + columnIndex}
+                                />
+                            </div>)
                     })
                 }
             </div>
         )
     }
     //渲染所有列
-    const renderCoulmns = (): ReactElement => {
-        const coulmns = coulmn.map((coulmnTitle: coulmnFormat, index: number) => renderCoulmn(coulmnTitle, currentData[index]))
+    const renderColumns = (): ReactElement => {
+        const columns = column.map((columnTitle: columnFormat, index: number) => renderColumn(columnTitle, currentData[index]))
+
         return (
-            <div className="table-coulmns">
-                {coulmns}
+            <div className="table-columns" >
+                {columns}
             </div>
         )
     }
     return (
         <div className="table-warp" >
             <div className="table-content-warp">
-                {renderRows()}
                 {/* 下面这里好像有点不规范，应该改成和上面renderRow一样的格式，就这样吧 */}
-                {renderCoulmns()}
+                {renderColumns()}
             </div>
             <div className="table-footer-warp">
 
@@ -101,3 +124,4 @@ export default ({row, coulmn, config, dataList}: Props) => {
         </div>
     )
 }
+export default Table;
