@@ -58,6 +58,13 @@ const Table = ({column, config, dataList}: Props) => {
                 break
         }
     }
+    const inputChangeHandle = (pageNumb: number) => {
+        if (pageNumb <= 0 || pageNumb > totalPage || isNaN(pageNumb)) {
+            return
+        }
+        setCurrentPage(pageNumb)
+
+    }
     //渲染footer按钮
     const renderPage = () => {
         const startBtn = (
@@ -72,7 +79,7 @@ const Table = ({column, config, dataList}: Props) => {
             <div className='table-root-content'>
                 {startBtn}
                 <div className='page-to-wrap'>
-                    <input className='page-to-input' value={currentPage} onChange={(e) => setCurrentPage(parseInt((e.target as HTMLInputElement).value))}></input>
+                    <input className='page-to-input' value={currentPage} onChange={(e) => inputChangeHandle(parseInt((e.target as HTMLInputElement).value))}></input>
                     <span className='page-num'>/ {totalPage}</span>
                 </div>
                 {endBtn}
