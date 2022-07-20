@@ -39,9 +39,9 @@ const Table = ({column, config, dataList}: Props) => {
         , [sortFlag])
     //分页这里要用
     //点击下一页renderIndex应该做出对应变化
-    const renderNum: number = config?.pagination ? (config?.paginationNum ?? 30) - 1 : Infinity;
+    const renderNum: number = config?.pagination ? (config?.paginationNum ?? 20) - 1 : Infinity
     const [currentPage, setCurrentPage] = useState<number>(1)
-    const renderIndex = useMemo(() => (currentPage - 1) * renderNum, [currentPage])
+    const renderIndex = useMemo(() => (currentPage - 1) * renderNum || 0, [currentPage])
     const dataLength = dataList.length
     const totalPage = Math.ceil(dataLength / renderNum)
     const flipPage = (type: 'pre' | 'next') => {
