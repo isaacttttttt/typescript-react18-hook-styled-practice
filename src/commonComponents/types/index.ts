@@ -1,4 +1,4 @@
 export interface BoxSize {
-  minHeight: string,
-  minWidth: string
+  minHeight: number,
+  minWidth: number
 }

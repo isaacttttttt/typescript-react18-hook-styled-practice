@@ -1,0 +1,7 @@
+@use '../globalsass/index.scss' as style;
+
+.button-wrap {
+  @include style.absolutePosition();
+  width: 100%;
+  height: 100%;
+}

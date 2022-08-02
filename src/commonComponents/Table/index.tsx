@@ -180,8 +180,8 @@ const Table = ({column, config, dataList}: Props) => {
   )
 }
 const boxSize = {
-  minHeight: '180px',
-  minWidth: '270px'
+  minHeight: 180,
+  minWidth: 270
 }
 export default getWrapComponent(Table, 'Table', boxSize);
 // export default Table;
